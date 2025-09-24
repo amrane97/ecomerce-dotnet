@@ -4,7 +4,20 @@
         : ICommand<UpdateProductCommandResponse>;
 
     public record UpdateProductCommandResponse(bool success);
-    public class UpdateProductHandler(IDocumentSession session, ILogger<UpdateProductHandler> logger) 
+
+    public class UpdateProductValidator: AbstractValidator<UpdateProductCommand>
+    {
+        public UpdateProductValidator()
+        {
+            RuleFor(x => x.Id).NotEmpty().WithMessage("Product Id is Required");
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Product Id is Required")
+                .Length(2, 150);
+            RuleFor(x => x.Price).GreaterThanOrEqualTo(0).WithMessage("Price is not valid");
+        }
+    }
+
+    public class UpdateProductHandler(IDocumentSession session) 
         : ICommandHandler<UpdateProductCommand, UpdateProductCommandResponse>
     {
         public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
@@ -12,7 +25,7 @@
             var product = await session.LoadAsync<Product>(command.Id);
             if (product is null)
             {
-                throw new ProductNotFoundException();
+                throw new ProductNotFoundException(command.Id);
             }
             
             product.Name = command.Name;

@@ -1,19 +1,20 @@
-﻿
-using Catalog.API.Models.Products.DeleteProduct;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Models.Products.GetProducts
 {
-
     public record GetProductsResponse(IEnumerable<Product> Products);
     public class GetProductsEndpoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/products", async ([FromServices] ISender sender) =>
+            app.MapGet("/products", async ([AsParameters] GetProductsQuery request, [FromServices] ISender sender) =>
             {
-                var result = await sender.Send(new GetProductsQuery());
+                var query = request.Adapt<GetProductsQuery>();
+                
+                var result = await sender.Send(query);
+
                 var response = result.Adapt<GetProductsResponse>();
+                
                 return Results.Ok(response);
             })
             .WithName("GetProducts")

@@ -2,7 +2,7 @@
 {
     public record GetProductByIdQuery(Guid ProductId) : IQuery<GetProductByIdResponse>;
     public record GetProductByIdResponse(Product Product);
-    public class GetProductByIdQueryHandler(IDocumentSession session, ILogger<GetProductByIdQueryHandler> logger)
+    public class GetProductByIdQueryHandler(IDocumentSession session)
         : IRequestHandler<GetProductByIdQuery, GetProductByIdResponse>
     {
         public async Task<GetProductByIdResponse> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
@@ -12,7 +12,7 @@
 
             if (product is null) 
             {
-                throw new ProductNotFoundException();
+                throw new ProductNotFoundException(query.ProductId);
             }
 
             return new GetProductByIdResponse(product);
