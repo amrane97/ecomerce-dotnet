@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using Ordering.Application.Data;
 using System.Reflection;
 
 namespace Ordering.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -12,7 +12,7 @@ public class ApplicationDbContext : DbContext
 
     // Representation des tables coté BDD
     public DbSet<Customer> Customers => Set<Customer>();
-    public DbSet<Product> products => Set<Product>();
+    public DbSet<Product> Products => Set<Product>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 

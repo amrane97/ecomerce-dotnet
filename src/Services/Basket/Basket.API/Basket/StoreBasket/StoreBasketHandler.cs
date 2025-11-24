@@ -1,6 +1,4 @@
 ﻿using Discount.Grpc;
-using JasperFx.Events.Daemon;
-using NetTopologySuite.Index.HPRtree;
 
 namespace Basket.API.Basket.StoreBasket;
 
