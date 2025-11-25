@@ -1,5 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
-using Ordering.Application.Data;
+using Ordering.Application.Data; 
 using Ordering.Application.Extensions;
 
 namespace Ordering.Application.Orders.Queries.GetOrdersByName;
